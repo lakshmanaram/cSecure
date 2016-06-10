@@ -1,0 +1,100 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:orientation="vertical"
+                android:weightSum="5"
+                tools:context=".MainActivity"
+                android:padding="@dimen/activity_horizontal_margin">
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/fNameLayout2"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/fNameLayout10"
+        android:textColorHint="#3f85f4"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" >
+
+        <EditText
+            android:id="@+id/username"
+            android:textColor="#3f85f4"
+            android:textColorHighlight="#3f85f4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Username"
+            android:layout_above="@+id/passwordm"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/fNameLayout10"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:textColorHint="#3f85f4"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:textColor="#3f85f4"
+            android:textColorHighlight="#3f85f4"
+            android:id="@+id/passwordm"
+            android:hint="Password"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+    </android.support.design.widget.TextInputLayout>
+
+    <Button
+        android:id="@+id/login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Login"
+        android:background="#000000"
+        android:textColor="#ffffff"
+        android:layout_below="@+id/fNameLayout10"
+        android:layout_alignLeft="@+id/fNameLayout10"
+        android:layout_alignStart="@+id/fNameLayout10"
+        android:layout_marginTop="34dp" />
+
+    <Button
+        android:id="@+id/signup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Sign Up"
+        android:background="#000000"
+        android:textColor="#ffffff"
+        android:layout_below="@+id/login"
+        android:layout_alignLeft="@+id/login"
+        android:layout_alignStart="@+id/login"
+        android:layout_marginTop="29dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Made With \u2665 by EasyToType"
+        android:id="@+id/textView2"
+        android:textColor="#3f85f4"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+    <TextView
+        android:layout_margin="40dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="50dp"
+        android:textStyle="bold"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/imageView"
+        android:textColor="#3f85f4"
+        android:text="cSecure"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+         />
+
+</RelativeLayout>
