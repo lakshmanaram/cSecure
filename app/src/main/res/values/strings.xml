@@ -1,4 +1,13 @@
 <resources>
     <string name="app_name">Notification Application</string>
     <string name="action_settings">Settings</string>
+    <string name="signup1">Username</string>
+    <string name="signup2">Aadhar No</string>
+    <string name="signup3">Name</string>
+    <string name="signup4">Gender</string>
+    <string name="signup5">Date of Birth</string>
+    <string name="signup6">Mobile</string>
+    <string name="signup7">Password</string>
+    <string name="signup8">Confirm Password</string>
+    <string name="signup9">Get Secure!</string>
 </resources>
