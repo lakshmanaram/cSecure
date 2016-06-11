@@ -5,6 +5,7 @@ package com.example.adarsh.notificationapplication;
  */
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,7 +53,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         holder.name.setText(mItems.get(position).getName());
         holder.phone.setText(mItems.get(position).getPhone());
         if(mItems.get(position).getCategory().equals("1")) {
@@ -63,9 +64,24 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent i = new Intent(mContext, MapActivity.class);
-                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    mContext.startActivity(i);
+                    Uri gmmIntentUri = Uri.parse("geo:0,0?q=12.910653,80.222298(present)");
+                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                    mapIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    mapIntent.setPackage("com.google.android.apps.maps");
+                    mContext.startActivity(mapIntent);
+                }
+            });
+        }else{
+            holder.buttoncont.setText("Call");
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    String uri = "tel:" + mItems.get(position).getPhone();
+                    Intent intent = new Intent(Intent.ACTION_DIAL);
+                    intent.setData(Uri.parse(uri));
+                    mContext.startActivity(intent);
                 }
             });
         }

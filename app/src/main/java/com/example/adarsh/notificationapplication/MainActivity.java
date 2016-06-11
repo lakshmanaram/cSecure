@@ -98,21 +98,21 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 if (!cautious_mode) {
                     cautious.setImageResource(R.drawable.caution);
                     cautious_mode = true;
-                    cautious.setClickable(false);
                     stopc.setVisibility(View.VISIBLE);
                     if(mGoogleApiClient.isConnected())
                         startLocationUpdates();
                     Toast.makeText(getApplicationContext(), "Activated Cautious mode", Toast.LENGTH_SHORT).show();
+                }else{
+                    startActivity(new Intent(getApplicationContext(),CautionContacts.class));
                 }
             }
         });
         stopc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                cautious.setImageResource(R.drawable.caution_2);
                 cautious_mode = false;
                 stopc.setVisibility(View.GONE);
-                cautious.setBackgroundColor(Color.parseColor("#000000"));
-                cautious.setClickable(true);
                 if (mGoogleApiClient.isConnected()) {
                     stopLocationUpdates();
                 }
@@ -123,10 +123,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         emergency.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                popup_request();
+                cautious.setImageResource(R.drawable.caution);
+                cautious_mode = true;
+                stopc.setVisibility(View.VISIBLE);
                 if(mGoogleApiClient.isConnected())
                     startLocationUpdates();
                 Toast.makeText(getApplicationContext(), "Started Transferring Locations", Toast.LENGTH_SHORT).show();
+                popup_request();
             }
         });
     }
