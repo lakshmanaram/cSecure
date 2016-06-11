@@ -17,6 +17,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
@@ -27,9 +28,14 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
-public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+import java.sql.Time;
+import java.util.Date;
+
+public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, LocationListener, GoogleApiClient.OnConnectionFailedListener {
 
     GoogleApiClient mGoogleApiClient;
 
@@ -38,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     @Override
     protected void onStart() {
         mGoogleApiClient.connect();
-        Log.i("location","connecting");
+        Log.i("location", "connecting");
         super.onStart();
     }
 
@@ -130,31 +136,80 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     }
 
     @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-            if (mLastLocation != null) {
-                Log.i("location","latitude = "+String.valueOf(mLastLocation.getLatitude()) + " longitude = " + String.valueOf(mLastLocation.getLongitude()));
-                Toast.makeText(getApplicationContext(),"latitude = "+String.valueOf(mLastLocation.getLatitude()) + " longitude = " + String.valueOf(mLastLocation.getLongitude()),Toast.LENGTH_SHORT).show();
-            }
+    protected void onPause() {
+        super.onPause();
+        stopLocationUpdates();
+    }
 
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+    protected void stopLocationUpdates() {
+        LocationServices.FusedLocationApi.removeLocationUpdates(
+                mGoogleApiClient, this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mGoogleApiClient.isConnected()) {
+            startLocationUpdates();
         }
+    }
+
+
+    protected void startLocationUpdates() {
+        LocationRequest mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(1000);
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Request calling
+            Toast.makeText(getApplicationContext(),"Sufficient permissions not given",Toast.LENGTH_SHORT).show();
+            return;
+        }
+        LocationServices.FusedLocationApi.requestLocationUpdates(
+                mGoogleApiClient, mLocationRequest, this);
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+//            Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+//            if (mLastLocation != null) {
+//                Log.i("location","latitude = "+String.valueOf(mLastLocation.getLatitude()) + " longitude = " + String.valueOf(mLastLocation.getLongitude()));
+//                Toast.makeText(getApplicationContext(),"latitude = "+String.valueOf(mLastLocation.getLatitude()) + " longitude = " + String.valueOf(mLastLocation.getLongitude()),Toast.LENGTH_SHORT).show();
+//            }
+            startLocationUpdates();
+            else{
+                Toast.makeText(getApplicationContext(),"Sufficient permissions not given",Toast.LENGTH_SHORT).show();
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+
+
+
+            }
     }
 
     @Override
     public void onConnectionSuspended(int i) {
-
+        Toast.makeText(getApplicationContext(),"Connection Suspended",Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Toast.makeText(getApplicationContext(),"Connection failed! Restart the app",Toast.LENGTH_SHORT).show();
+    }
 
+    protected void CallAPIs(Location location, String last_updated){
+        // Make API calls
+        Toast.makeText(getApplicationContext(),"latitude = "+String.valueOf(location.getLatitude())+" longitude = "+String.valueOf(location.getLongitude())+" last updated time = "+last_updated,Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        String current_time = DateFormat.getTimeFormat(getApplicationContext()).format(new Date());
+        CallAPIs(location,current_time);
     }
 /*
     @Override
