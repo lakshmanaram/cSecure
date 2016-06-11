@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Notification Application</string>
+    <string name="app_name">cSecure</string>
     <string name="action_settings">Settings</string>
     <string name="signup1">Username</string>
     <string name="signup2">Aadhar No</string>

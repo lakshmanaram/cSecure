@@ -1,12 +1,25 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingTop="@dimen/activity_vertical_margin"
-                android:paddingBottom="@dimen/activity_vertical_margin"
                 android:orientation="vertical"
                 android:weightSum="5"
                 tools:context=".MainActivity"
-                android:padding="@dimen/activity_horizontal_margin">
+                android:background="@drawable/seamless">
+
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:id="@+id/toolbar"
+        android:background="#33000000"/>
+
+    <ImageView
+        android:id="@+id/emergency"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:text="Emergency"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:src="@drawable/emergency" />
 
     <Button
         android:id="@+id/track"
@@ -15,9 +28,6 @@
         android:text="Track your loved ones"
         android:background="#000000"
         android:textColor="#ffffff"
-        android:layout_below="@+id/myProfile"
-        android:layout_alignParentLeft="@+id/myProfile"
-        android:layout_alignParentStart="@+id/myProfile"
         android:layout_marginTop="50dp" />
 
     <Button
@@ -28,10 +38,7 @@
         android:background="#000000"
         android:textColor="#ffffff"
         android:clickable="true"
-        android:layout_below="@+id/track"
-        android:layout_alignParentLeft="@+id/track"
-        android:layout_alignParentStart="@+id/track"
-        android:layout_marginTop="30dp" />
+        android:layout_marginBottom="105dp" />
     <Button
         android:id="@+id/stopcautious"
         android:layout_width="match_parent"
@@ -44,22 +51,13 @@
         android:layout_alignLeft="@+id/cautious"
         android:layout_alignStart="@+id/cautious"
         android:layout_marginTop="30dp"/>
-    <Button
-        android:id="@+id/emergency"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Emergency"
-        android:background="#000000"
-        android:textColor="#ffffff"
-        android:layout_below="@+id/stopcautious"
-        android:layout_alignLeft="@+id/stopcautious"
-        android:layout_alignStart="@+id/stopcautious"
-        android:layout_marginTop="30dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Made With \u2665 by EasyToType"
+        android:layout_gravity="center"
+        android:textColor="#FFFFFF"
         android:id="@+id/textView2"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
@@ -67,10 +65,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/myProfile"
-        android:src="@mipmap/ic_launcher"
+        android:src="@drawable/default_profile"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         />
 
-</RelativeLayout>
+</LinearLayout>

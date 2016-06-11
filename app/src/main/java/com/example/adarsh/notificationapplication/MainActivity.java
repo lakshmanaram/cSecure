@@ -25,6 +25,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -59,16 +60,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         SharedPreferences prefs = getSharedPreferences("user",Context.MODE_PRIVATE);
         Username = prefs.getString(UNAME, "default");
         ImageButton profile = (ImageButton) findViewById(R.id.myProfile);
         assert profile != null;
-        profile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),Profile.class));
-            }
-        });
         final Button track = (Button) findViewById(R.id.track);
         assert track != null;
         track.setOnClickListener(new View.OnClickListener() {
@@ -116,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 }
             }
         });
-        Button emergency = (Button) findViewById(R.id.emergency);
+        ImageView emergency = (ImageView) findViewById(R.id.emergency);
         assert emergency != null;
         emergency.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -196,6 +194,29 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     public void onLocationChanged(Location location) {
         String current_time = DateFormat.getTimeFormat(getApplicationContext()).format(new Date());
         CallAPIs(location,current_time);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_5: {
+                startActivity(new Intent(getApplicationContext(),Profile.class));
+                return true;
+            }
+            case R.id.action_10:
+                return true;
+            case R.id.action_30:
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 /*
     @Override
