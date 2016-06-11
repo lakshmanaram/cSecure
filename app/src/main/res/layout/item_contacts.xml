@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="70dp"
+    android:background="#33000000"
+    android:padding="5dp"
+    android:layout_margin="3dp">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/itemname"
+        android:text="Name"
+        android:fontFamily="sans-serif-condensed"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:textColor="@color/colorPrimary"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/itemusername"
+        android:text="Username"
+        android:textSize="12sp"
+        android:textColor="#AA000000"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/itemphone"
+        android:text="0123456789"
+        android:textStyle="bold"
+        android:textSize="12sp"
+        android:textColor="#AA000000"/>
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="X"
+        android:id="@+id/buttoncont"
+        android:padding="10dp"
+        android:gravity="center|right"
+        android:textSize="24sp"
+        android:textColor="#FF0000"
+        android:textStyle="bold"/>
+</LinearLayout>

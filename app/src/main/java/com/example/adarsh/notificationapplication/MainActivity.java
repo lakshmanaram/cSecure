@@ -1,9 +1,11 @@
 package com.example.adarsh.notificationapplication;
 
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -20,10 +22,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -61,13 +65,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        scheduleNotification(getNotification("Adarsh"), 0);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         SharedPreferences prefs = getSharedPreferences("user",Context.MODE_PRIVATE);
         Username = prefs.getString(UNAME, "default");
-        ImageButton profile = (ImageButton) findViewById(R.id.myProfile);
-        assert profile != null;
-        final Button track = (Button) findViewById(R.id.track);
+        final ImageView track = (ImageView) findViewById(R.id.track);
         assert track != null;
         track.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,9 +86,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                     .addApi(LocationServices.API)
                     .build();
         }
-        final Button cautious = (Button) findViewById(R.id.cautious);
+        final ImageView cautious = (ImageView) findViewById(R.id.cautious);
         assert cautious != null;
-        final Button stopc = (Button) findViewById(R.id.stopcautious);
+        final ImageView stopc = (ImageView) findViewById(R.id.stopcautious);
         assert stopc != null;
         if (cautious.getDrawingCacheBackgroundColor() == Color.parseColor("#aaaaaa"))
             cautious_mode = true;
@@ -92,8 +96,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             @Override
             public void onClick(View v) {
                 if (!cautious_mode) {
+                    cautious.setImageResource(R.drawable.caution);
                     cautious_mode = true;
-                    cautious.setBackgroundColor(Color.parseColor("#aaaaaa"));
                     cautious.setClickable(false);
                     stopc.setVisibility(View.VISIBLE);
                     if(mGoogleApiClient.isConnected())
@@ -119,10 +123,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         emergency.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                popup_request();
                 if(mGoogleApiClient.isConnected())
                     startLocationUpdates();
                 Toast.makeText(getApplicationContext(), "Started Transferring Locations", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(getApplicationContext(),Emergency.class));
             }
         });
     }
@@ -256,4 +260,58 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         return builder.build();
     }
 */
+private void scheduleNotification(Notification notification, int delay) {
+
+    Intent notificationIntent = new Intent(this, NotificationPublisher.class);
+    notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, 1);
+    notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification);
+    PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+    long futureInMillis = SystemClock.elapsedRealtime() + delay;
+    AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+    alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
+}
+
+    private Notification getNotification(String content) {
+        Notification.Builder builder = new Notification.Builder(this);
+        builder.setContentTitle("Adarsh");
+        builder.setContentText("Please help me! I am in an emergency");
+        builder.setSmallIcon(R.mipmap.ic_launcher);
+        return builder.build();
+    }
+
+    private void popup_request() {
+        LayoutInflater layoutInflater = LayoutInflater.from(MainActivity.this);
+
+        View promptView = layoutInflater.inflate(R.layout.popup_layout, null);
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.this);
+
+        // set prompts.xml to be the layout file of the alertdialog builder
+        alertDialogBuilder.setView(promptView);
+
+        final EditText input = (EditText) promptView.findViewById(R.id.userInput);
+
+        // setup a dialog window
+        alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // get user input and set it to result
+//                        editTextMainScreen.setText(input.getText());
+                        Toast.makeText(getApplicationContext(), "Sent emergency message", Toast.LENGTH_LONG).show();
+                    }
+                })
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+        // create an alert dialog
+        AlertDialog alertD = alertDialogBuilder.create();
+
+        alertD.show();
+    }
 }
