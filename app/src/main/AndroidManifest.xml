@@ -12,6 +12,7 @@
         android:theme="@style/AppTheme.NoActionBar">
         <activity
             android:name=".MainActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
@@ -19,6 +20,7 @@
 
         <activity
             android:name=".LoginActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -29,9 +31,15 @@
         <activity
             android:name=".SignUp"
             android:label="@string/signup9"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat">
         </activity>
-
+        <activity
+            android:name=".Emergency"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".Profile">
+        </activity>
     </application>
 
 </manifest>

@@ -9,28 +9,16 @@
                 android:padding="@dimen/activity_horizontal_margin">
 
     <Button
-        android:id="@+id/pid"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="People in Danger"
-        android:background="#000000"
-        android:textColor="#ffffff"
-        android:layout_below="@+id/myProfile"
-        android:layout_alignParentLeft="@+id/myProfile"
-        android:layout_alignParentStart="@+id/myProfile"
-        android:layout_marginTop="50dp" />
-
-    <Button
         android:id="@+id/track"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Track your loved ones"
         android:background="#000000"
         android:textColor="#ffffff"
-        android:layout_below="@+id/pid"
-        android:layout_alignParentLeft="@+id/pid"
-        android:layout_alignParentStart="@+id/pid"
-        android:layout_marginTop="30dp" />
+        android:layout_below="@+id/myProfile"
+        android:layout_alignParentLeft="@+id/myProfile"
+        android:layout_alignParentStart="@+id/myProfile"
+        android:layout_marginTop="50dp" />
 
     <Button
         android:id="@+id/cautious"

@@ -38,19 +38,18 @@ import java.util.Date;
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, LocationListener, GoogleApiClient.OnConnectionFailedListener {
 
     GoogleApiClient mGoogleApiClient;
-
+    static boolean connected = false;
     static boolean cautious_mode = false;
 
     @Override
     protected void onStart() {
         mGoogleApiClient.connect();
-        Log.i("location", "connecting");
         super.onStart();
     }
 
     @Override
     protected void onStop() {
-        mGoogleApiClient.disconnect();
+//        mGoogleApiClient.disconnect();
         super.onStop();
     }
 
@@ -63,15 +62,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Intent to profile
-            }
-        });
-        Button pid = (Button) findViewById(R.id.pid);
-        assert pid != null;
-        pid.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // intent to people in danger
+                startActivity(new Intent(getApplicationContext(),Profile.class));
             }
         });
         Button track = (Button) findViewById(R.id.track);
@@ -103,7 +94,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                     cautious.setBackgroundColor(Color.parseColor("#aaaaaa"));
                     cautious.setClickable(false);
                     stopc.setVisibility(View.VISIBLE);
-                    // call to alarm manager
+                    if(mGoogleApiClient.isConnected())
+                        startLocationUpdates();
                     Toast.makeText(getApplicationContext(), "Activatedd Cautious mode", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -115,7 +107,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 stopc.setVisibility(View.GONE);
                 cautious.setBackgroundColor(Color.parseColor("#000000"));
                 cautious.setClickable(true);
-                // Calls to cancel Alarm manager
+                if (mGoogleApiClient.isConnected()) {
+                    stopLocationUpdates();
+                }
             }
         });
         Button emergency = (Button) findViewById(R.id.emergency);
@@ -123,9 +117,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         emergency.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // API calls to show emergency
-                // Calls to Alarm manager.
-                // Do the same as in cautious mode.
+                if(mGoogleApiClient.isConnected())
+                    startLocationUpdates();
+                Toast.makeText(getApplicationContext(), "Started Transferring Locations", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getApplicationContext(),Emergency.class));
             }
         });
     }
@@ -135,25 +130,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        stopLocationUpdates();
-    }
-
     protected void stopLocationUpdates() {
         LocationServices.FusedLocationApi.removeLocationUpdates(
                 mGoogleApiClient, this);
     }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (mGoogleApiClient.isConnected()) {
-            startLocationUpdates();
-        }
-    }
-
 
     protected void startLocationUpdates() {
         LocationRequest mLocationRequest = new LocationRequest();
@@ -175,7 +155,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 //                Log.i("location","latitude = "+String.valueOf(mLastLocation.getLatitude()) + " longitude = " + String.valueOf(mLastLocation.getLongitude()));
 //                Toast.makeText(getApplicationContext(),"latitude = "+String.valueOf(mLastLocation.getLatitude()) + " longitude = " + String.valueOf(mLastLocation.getLongitude()),Toast.LENGTH_SHORT).show();
 //            }
-            startLocationUpdates();
+        connected = true;
+//            startLocationUpdates();
             else{
                 Toast.makeText(getApplicationContext(),"Sufficient permissions not given",Toast.LENGTH_SHORT).show();
                 //    ActivityCompat#requestPermissions
@@ -202,6 +183,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     protected void CallAPIs(Location location, String last_updated){
         // Make API calls
+        Log.i("location","latitude = "+String.valueOf(location.getLatitude())+" longitude = "+String.valueOf(location.getLongitude())+" last updated time = "+last_updated);
         Toast.makeText(getApplicationContext(),"latitude = "+String.valueOf(location.getLatitude())+" longitude = "+String.valueOf(location.getLongitude())+" last updated time = "+last_updated,Toast.LENGTH_SHORT).show();
 
     }
