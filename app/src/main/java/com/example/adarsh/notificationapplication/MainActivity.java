@@ -5,13 +5,19 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,15 +25,35 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
+
+public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+
+    GoogleApiClient mGoogleApiClient;
 
     static boolean cautious_mode = false;
+
+    @Override
+    protected void onStart() {
+        mGoogleApiClient.connect();
+        Log.i("location","connecting");
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        mGoogleApiClient.disconnect();
+        super.onStop();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ImageButton profile = (ImageButton) findViewById(R.id.myProfile);
-        assert profile!=null;
+        assert profile != null;
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -50,16 +76,23 @@ public class MainActivity extends AppCompatActivity {
                 // Intent to track activity
             }
         });
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+        }
         final Button cautious = (Button) findViewById(R.id.cautious);
         assert cautious != null;
         final Button stopc = (Button) findViewById(R.id.stopcautious);
         assert stopc != null;
-        if(cautious.getDrawingCacheBackgroundColor() == Color.parseColor("#aaaaaa"))
+        if (cautious.getDrawingCacheBackgroundColor() == Color.parseColor("#aaaaaa"))
             cautious_mode = true;
         cautious.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!cautious_mode) {
+                if (!cautious_mode) {
                     cautious_mode = true;
                     cautious.setBackgroundColor(Color.parseColor("#aaaaaa"));
                     cautious.setClickable(false);
@@ -89,6 +122,39 @@ public class MainActivity extends AppCompatActivity {
                 // Do the same as in cautious mode.
             }
         });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+            if (mLastLocation != null) {
+                Log.i("location","latitude = "+String.valueOf(mLastLocation.getLatitude()) + " longitude = " + String.valueOf(mLastLocation.getLongitude()));
+                Toast.makeText(getApplicationContext(),"latitude = "+String.valueOf(mLastLocation.getLatitude()) + " longitude = " + String.valueOf(mLastLocation.getLongitude()),Toast.LENGTH_SHORT).show();
+            }
+
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
     }
 /*
     @Override
