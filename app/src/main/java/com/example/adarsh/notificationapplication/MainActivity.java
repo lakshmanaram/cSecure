@@ -5,6 +5,7 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
@@ -40,7 +41,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     GoogleApiClient mGoogleApiClient;
     static boolean connected = false;
     static boolean cautious_mode = false;
-
+    static String Username = "";
+    final static String UNAME = "username";
     @Override
     protected void onStart() {
         mGoogleApiClient.connect();
@@ -57,6 +59,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        SharedPreferences prefs = getSharedPreferences("user",Context.MODE_PRIVATE);
+        Username = prefs.getString(UNAME, "default");
         ImageButton profile = (ImageButton) findViewById(R.id.myProfile);
         assert profile != null;
         profile.setOnClickListener(new View.OnClickListener() {
@@ -65,12 +69,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 startActivity(new Intent(getApplicationContext(),Profile.class));
             }
         });
-        Button track = (Button) findViewById(R.id.track);
+        final Button track = (Button) findViewById(R.id.track);
         assert track != null;
         track.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Intent to track activity
+                startActivity(new Intent(getApplicationContext(),Track.class));
             }
         });
         if (mGoogleApiClient == null) {
@@ -96,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                     stopc.setVisibility(View.VISIBLE);
                     if(mGoogleApiClient.isConnected())
                         startLocationUpdates();
-                    Toast.makeText(getApplicationContext(), "Activatedd Cautious mode", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Activated Cautious mode", Toast.LENGTH_SHORT).show();
                 }
             }
         });
