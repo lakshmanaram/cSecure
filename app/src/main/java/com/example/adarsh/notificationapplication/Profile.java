@@ -14,7 +14,7 @@ public class Profile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         //TODO: Receive JSON and update the received_user object
-        User received_user = new User("laksh","lakshmanaram","A102345678","+919000000000","b15 sri harsh19","Adarsh Srivatsan Harshitha");
+        User received_user = new User("laksh","lakshmanaram","A102345678","+919000000000","b15 sri harsh19","Adarsh Srivatsan Harshitha","+919342444466 +919988123456 +919234123645");
         TextView uname = (TextView)findViewById(R.id.profileusername);
         assert uname!=null;
         uname.setText(received_user.username);
